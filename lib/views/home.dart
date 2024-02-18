@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,7 +17,7 @@ class HomePage extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () {},
+                onPressed: () => context.push('/products'),
                 child: Text('Mes Produits'),
               ),
             ),
@@ -26,7 +27,7 @@ class HomePage extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () {},
+                onPressed: () => context.push('/scan'),
                 child: Text('Scan'),
               ),
             ),
