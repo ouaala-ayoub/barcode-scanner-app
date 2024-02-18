@@ -41,7 +41,7 @@ dependencies:
   floor:
   sqflite: 
   provider: 
-  google_mlkit_barcode_scanning : 
+  mobile_scanner: 3.5.5
 
 dev_dependencies:
   flutter_test:

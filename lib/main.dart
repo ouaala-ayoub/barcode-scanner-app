@@ -7,62 +7,64 @@ import 'package:testapp/models/helpers/db_helpers.dart';
 import 'package:testapp/providers/products_list_provider.dart';
 import 'package:testapp/views/home.dart';
 import 'package:testapp/views/products.dart';
+import 'package:testapp/views/products_add.dart';
 import 'package:testapp/views/scan.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dao =
-      await $FloorProductsDataBase.databaseBuilder('products_db_1.db').build();
+      await $FloorProductsDataBase.databaseBuilder('products_db.db').build();
 
   runApp(MyApp(
-    routes: routes(dao),
+    helper: ProductsHelper(productDb: dao),
   ));
 }
 
-routes(ProductsDataBase db) {
-  return GoRouter(
-    routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const HomePage(),
+final routes = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/scan',
+      builder: (context, state) => const ScanPage(),
+    ),
+    GoRoute(
+      path: '/products',
+      builder: (context, state) => Consumer<ProductsListProvider>(
+        builder: (context, provider, child) => ProductsPage(provider: provider),
       ),
-      GoRoute(
-        path: '/scan',
-        builder: (context, state) => const ScanPage(),
+    ),
+    GoRoute(
+      path: '/products/add',
+      builder: (context, state) => Consumer<ProductsListProvider>(
+        builder: (context, provider, child) => ProductsAdd(provider: provider),
       ),
-      GoRoute(
-        path: '/products',
-        builder: (context, state) => ChangeNotifierProvider(
-          create: (context) => ProductsListProvider(
-            helper: ProductsHelper(productDb: db),
-          ),
-          child: Consumer<ProductsListProvider>(
-            builder: (context, provider, child) =>
-                ProductsPage(provider: provider),
-          ),
-        ),
-      ),
-    ],
-  );
-}
+    )
+  ],
+);
 
 final logger = Logger();
 
 class MyApp extends StatelessWidget {
-  final routes;
-  const MyApp({required this.routes, super.key});
+  final ProductsHelper helper;
+  const MyApp({required this.helper, super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (context) => ProductsListProvider(helper: helper),
+      child: MaterialApp.router(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        routerConfig: routes,
+        debugShowCheckedModeBanner: false,
       ),
-      routerConfig: routes,
-      debugShowCheckedModeBanner: false,
     );
   }
 }

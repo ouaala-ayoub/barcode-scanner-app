@@ -16,4 +16,9 @@ class Product {
       required this.price,
       required this.name,
       required this.quantity});
+
+  @override
+  String toString() {
+    return 'Product(id:$id, codebar:$codebar, price:$price, name:$name, quantity:$quantity)';
+  }
 }

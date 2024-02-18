@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testapp/models/core/product.dart';
+import 'package:go_router/go_router.dart';
 import 'package:testapp/providers/products_list_provider.dart';
 import 'package:testapp/views/product_widget.dart';
 
@@ -21,6 +21,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+    //todo add search
     return Scaffold(
       appBar: AppBar(
         title: const Text("Produits"),
@@ -39,6 +40,12 @@ class _ProductsPageState extends State<ProductsPage> {
               (products) => Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 20, right: 20),
+                  //   child: TextField(
+                  //     decoration: InputDecoration(label: Text('Rechercher')),
+                  //   ),
+                  // ),
                   Expanded(
                     child: products.isEmpty
                         ? const Center(
@@ -48,6 +55,8 @@ class _ProductsPageState extends State<ProductsPage> {
                             itemCount: products.length,
                             itemBuilder: (context, index) => ProductWidget(
                               product: products[index],
+                              onClicked: (product) {},
+                              onDeleteClicked: (product) {},
                             ),
                           ),
                   ),
@@ -55,20 +64,24 @@ class _ProductsPageState extends State<ProductsPage> {
                     height: 5,
                   ),
                   FilledButton(
-                    onPressed: () {
-                      widget.provider.addProduct(
-                        Product(
-                            codebar: '32132123132123',
-                            price: 10,
-                            name: 'product x',
-                            quantity: 3),
-                        onSuccess: (id) {
-                          widget.provider.getAllProducts();
-                        },
-                        onFail: (e) {
-                          //todo show message
-                        },
-                      );
+                    onPressed: () async {
+                      // widget.provider.addProduct(
+                      //   Product(
+                      //       codebar: '32132123132123',
+                      //       price: 10,
+                      //       name: 'product x',
+                      //       quantity: 3),
+                      //   onSuccess: (id) {
+                      //     widget.provider.getAllProducts();
+                      //   },
+                      //   onFail: (e) {
+                      //     //todo show message
+                      //   },
+                      // );
+                      final added = await context.push('/products/add');
+                      if (added == true) {
+                        widget.provider.getAllProducts();
+                      }
                     },
                     child: const Text('Ajouter des produits'),
                   ),
