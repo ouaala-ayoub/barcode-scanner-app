@@ -85,7 +85,7 @@ class _$ProductsDataBase extends ProductsDataBase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Product` (`id` INTEGER, `codebar` TEXT NOT NULL, `price` REAL NOT NULL, `name` TEXT NOT NULL, `quantity` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Product` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `codebar` TEXT NOT NULL, `price` REAL NOT NULL, `name` TEXT NOT NULL, `quantity` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -181,7 +181,7 @@ class _$ProductsDao extends ProductsDao {
   @override
   Future<int> updateProduct(Product product) {
     return _productUpdateAdapter.updateAndReturnChangedRows(
-        product, OnConflictStrategy.abort);
+        product, OnConflictStrategy.replace);
   }
 
   @override

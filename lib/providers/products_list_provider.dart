@@ -35,4 +35,14 @@ class ProductsListProvider extends ChangeNotifier {
           (id) => onSuccess(id),
         ));
   }
+
+  updateProduct(Product product,
+      {required Function(int) onSuccess, required Function(dynamic) onFail}) {
+    helper.updateProduct(product).then(
+          (value) => value.fold(
+            (e) => onFail(e),
+            (id) => onSuccess(id),
+          ),
+        );
+  }
 }

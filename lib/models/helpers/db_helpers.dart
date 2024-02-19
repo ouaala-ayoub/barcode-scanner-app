@@ -34,4 +34,13 @@ class ProductsHelper {
       return Left(e);
     }
   }
+
+  Future<Either<dynamic, int>> updateProduct(Product product) async {
+    try {
+      final numRows = await productDb.productsDao.updateProduct(product);
+      return Right(numRows);
+    } catch (e) {
+      return Left(e);
+    }
+  }
 }

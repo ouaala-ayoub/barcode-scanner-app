@@ -14,6 +14,7 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () => onClicked(product),
       subtitle: Text(
         '${product.price} Dh',
         style: const TextStyle(fontSize: 16),
