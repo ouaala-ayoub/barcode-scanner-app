@@ -5,15 +5,17 @@ import 'package:provider/provider.dart';
 import 'package:testapp/models/core/db.dart';
 import 'package:testapp/models/helpers/db_helpers.dart';
 import 'package:testapp/providers/products_list_provider.dart';
+import 'package:testapp/providers/products_scan_provider.dart';
 import 'package:testapp/views/home.dart';
 import 'package:testapp/views/products.dart';
 import 'package:testapp/views/products_add.dart';
 import 'package:testapp/views/scan.dart';
+import 'package:testapp/views/scanner_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dao =
-      await $FloorProductsDataBase.databaseBuilder('products_db.db').build();
+      await $FloorProductsDataBase.databaseBuilder('products_db_1.db').build();
 
   runApp(MyApp(
     helper: ProductsHelper(productDb: dao),
@@ -28,7 +30,20 @@ final routes = GoRouter(
     ),
     GoRoute(
       path: '/scan',
-      builder: (context, state) => const ScanPage(),
+      builder: (context, state) => ChangeNotifierProvider(
+        create: (context) => ProductsScanProvider(),
+        builder: (context, child) => Consumer<ProductsScanProvider>(
+          builder: (context, provider, child) => ScanPage(provider: provider),
+        ),
+      ),
+    ),
+    GoRoute(
+      path: '/scan_for_cart',
+      builder: (context, state) => Consumer<ProductsListProvider>(
+        builder: (context, provider, child) => ScannerWidget(
+          provider: provider,
+        ),
+      ),
     ),
     GoRoute(
       path: '/products',

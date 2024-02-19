@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:testapp/main.dart';
-import 'package:testapp/models/core/product.dart';
+import 'package:testapp/models/helpers/functions_helper.dart';
 import 'package:testapp/providers/products_list_provider.dart';
 
 bool added = false;
@@ -17,6 +16,10 @@ class ProductsAdd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    pop() {
+      context.pop();
+    }
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) => context.pop(added),
@@ -39,7 +42,7 @@ class ProductsAdd extends StatelessWidget {
                 });
               } else {
                 //!async pop
-                context.pop();
+                pop();
               }
             } else {
               context.pop();
@@ -49,74 +52,5 @@ class ProductsAdd extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<Product?> getProductFromUser(
-      BuildContext context, String codeBar) async {
-    final nameController = TextEditingController();
-    final priceController = TextEditingController();
-    final quantityController = TextEditingController();
-    final product = showAdaptiveDialog<Product>(
-      context: context,
-      builder: (context) => AlertDialog.adaptive(
-        title: const Text('Entrer les informations'),
-        content: ListView(
-          shrinkWrap: true,
-          children: [
-            Text('codebar : $codeBar'),
-            const SizedBox(
-              height: 5,
-            ),
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                label: Text('Nom du produit'),
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: priceController,
-              decoration: const InputDecoration(
-                label: Text('Prix'),
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              controller: quantityController,
-              decoration: const InputDecoration(
-                label: Text('Quantité'),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          OutlinedButton(
-            onPressed: () => context.pop(),
-            child: const Text('Annuler'),
-          ),
-          FilledButton(
-            onPressed: () {
-              context.pop(
-                Product(
-                  codebar: codeBar,
-                  price: double.parse(priceController.text),
-                  name: nameController.text,
-                  quantity: int.parse(quantityController.text),
-                ),
-              );
-            },
-            child: const Text('Ajouter'),
-          )
-        ],
-      ),
-    );
-    return product;
   }
 }

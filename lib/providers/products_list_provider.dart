@@ -17,6 +17,12 @@ class ProductsListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<Product?> getProductByCodebar(String codebar) async {
+    final product =
+        await helper.productDb.productsDao.getProductByCodebar(codebar);
+    return product;
+  }
+
   addProduct(Product product,
       {required Function(int) onSuccess,
       required Function(dynamic) onFail}) async {
