@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:testapp/main.dart';
 import 'package:testapp/providers/products_list_provider.dart';
 import 'package:testapp/views/product_widget.dart';
 
@@ -55,8 +56,42 @@ class _ProductsPageState extends State<ProductsPage> {
                             itemCount: products.length,
                             itemBuilder: (context, index) => ProductWidget(
                               product: products[index],
-                              onClicked: (product) {},
-                              onDeleteClicked: (product) {},
+                              onClicked: (product) {
+                                //todo add product edit page
+                              },
+                              onDeleteClicked: (product) async {
+                                final deleted = await showAdaptiveDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog.adaptive(
+                                    title: const Text('Supprimer ?'),
+                                    content: Text(
+                                        'Supprimer le produit ${product.name} de la list ?'),
+                                    actions: [
+                                      FilledButton(
+                                        onPressed: () {
+                                          widget.provider.deleteProduct(product,
+                                              onSuccess: (id) {
+                                            context.pop(true);
+                                          }, onFail: (e) {
+                                            context.pop();
+                                          });
+                                        },
+                                        child: const Text('Oui'),
+                                      ),
+                                      OutlinedButton(
+                                        onPressed: () => context.pop(),
+                                        child: const Text('Non'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                logger.d(deleted);
+                                if (deleted == true) {
+                                  widget.provider.getAllProducts();
+                                } else {
+                                  //todo show a error snack bar
+                                }
+                              },
                             ),
                           ),
                   ),

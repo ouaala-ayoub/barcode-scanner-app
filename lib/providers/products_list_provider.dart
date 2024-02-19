@@ -27,4 +27,12 @@ class ProductsListProvider extends ChangeNotifier {
           ),
         );
   }
+
+  deleteProduct(Product product,
+      {required Function(int) onSuccess, required Function(dynamic) onFail}) {
+    helper.deleteProduct(product).then((value) => value.fold(
+          (e) => onFail(e),
+          (id) => onSuccess(id),
+        ));
+  }
 }

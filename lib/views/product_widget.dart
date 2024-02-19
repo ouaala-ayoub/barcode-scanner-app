@@ -4,7 +4,7 @@ import 'package:testapp/models/core/product.dart';
 class ProductWidget extends StatelessWidget {
   final Product product;
   final Function(Product) onClicked;
-  final Function(Product) onDeleteClicked;
+  final Future<bool?> Function(Product) onDeleteClicked;
   const ProductWidget(
       {required this.onClicked,
       required this.onDeleteClicked,
@@ -34,7 +34,7 @@ class ProductWidget extends StatelessWidget {
               width: 5,
             ),
             GestureDetector(
-              onTap: onDeleteClicked(product),
+              onTap: () async => onDeleteClicked(product),
               child: const Icon(
                 Icons.delete_forever,
                 color: Colors.red,

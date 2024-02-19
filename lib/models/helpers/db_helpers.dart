@@ -25,4 +25,13 @@ class ProductsHelper {
       return Left(e);
     }
   }
+
+  Future<Either<dynamic, int>> deleteProduct(Product product) async {
+    try {
+      final deletedId = await productDb.productsDao.deleteProduct(product);
+      return Right(deletedId);
+    } catch (e) {
+      return Left(e);
+    }
+  }
 }
