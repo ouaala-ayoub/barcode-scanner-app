@@ -32,6 +32,8 @@ class _ProductsAddState extends State<ProductsAdd> {
       context.pop();
     }
 
+    final manager = ScaffoldMessenger.of(context);
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) => context.pop(added),
@@ -40,11 +42,11 @@ class _ProductsAddState extends State<ProductsAdd> {
           controller: controller,
           onDetect: (barcodes) async {
             final codeBar = barcodes.barcodes[0].rawValue;
-            logger.i(codeBar);
             if (codeBar != null) {
               final product = await getProductFromUser(context, codeBar);
               if (product != null) {
                 logger.d(product);
+<<<<<<< HEAD
                 widget.provider.addProduct(product, onSuccess: (id) {
                   // context.pop(true);
                   controller.start(cameraFacingOverride: CameraFacing.back);
@@ -52,6 +54,29 @@ class _ProductsAddState extends State<ProductsAdd> {
                 }, onFail: (e) {
                   context.pop();
                 });
+=======
+                final foundProduct =
+                    await provider.getProductByCodebar(codeBar);
+                if (foundProduct == null) {
+                  provider.addProduct(
+                    product,
+                    onSuccess: (id) {
+                      // context.pop(true);
+                      controller.start(cameraFacingOverride: CameraFacing.back);
+                      added = true;
+                    },
+                    onFail: (e) {
+                      context.pop();
+                    },
+                  );
+                } else {
+                  manager.showSnackBar(
+                    const SnackBar(
+                      content: Text('Produit deja dans la base de données'),
+                    ),
+                  );
+                }
+>>>>>>> bdc464e8bde95541c998af34d7ae9705e3a3191e
               } else {
                 //!async pop
                 pop();
