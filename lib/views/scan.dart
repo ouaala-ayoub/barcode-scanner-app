@@ -18,20 +18,25 @@ class ScanPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: provider.scannedProducts.length,
-              itemBuilder: (context, index) => CartProductWidget(
-                addClicked: (scProduct) =>
-                    provider.setQuantity(index, scProduct.cartQuantity + 1),
-                minusClicked: (scProduct) => scProduct.cartQuantity > 0
-                    ? provider.setQuantity(index, scProduct.cartQuantity - 1)
-                    : null,
-                cartProduct: provider.scannedProducts[index],
-                onDeleteClicked: (product) => provider.removeProduct(
-                  product.id!,
-                ),
-              ),
-            ),
+            child: provider.scannedProducts.isEmpty
+                ? const Center(
+                    child: Text('Pas de produits'),
+                  )
+                : ListView.builder(
+                    itemCount: provider.scannedProducts.length,
+                    itemBuilder: (context, index) => CartProductWidget(
+                      addClicked: (scProduct) => provider.setQuantity(
+                          index, scProduct.cartQuantity + 1),
+                      minusClicked: (scProduct) => scProduct.cartQuantity > 0
+                          ? provider.setQuantity(
+                              index, scProduct.cartQuantity - 1)
+                          : null,
+                      cartProduct: provider.scannedProducts[index],
+                      onDeleteClicked: (product) => provider.removeProduct(
+                        product.id!,
+                      ),
+                    ),
+                  ),
           ),
           Text(
             'Total : ${provider.total} Dh',

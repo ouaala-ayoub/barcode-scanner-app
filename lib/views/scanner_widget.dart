@@ -5,6 +5,7 @@ import 'package:testapp/main.dart';
 import 'package:testapp/models/core/product.dart';
 import 'package:testapp/models/helpers/functions_helper.dart';
 import 'package:testapp/providers/products_list_provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ScannerWidget extends StatelessWidget {
   final ProductsListProvider provider;
@@ -14,7 +15,7 @@ class ScannerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final manager = ScaffoldMessenger.of(context);
+    final manager = ScaffoldMessenger.of(context);
 
     getUserInput(String codebar) async {
       return await getProductFromUser(context, codebar);
@@ -31,6 +32,7 @@ class ScannerWidget extends StatelessWidget {
             detectionSpeed: DetectionSpeed.noDuplicates,
           ),
           onDetect: (barcodes) async {
+            AudioPlayer().play(AssetSource('audio/beep.mp3'));
             final codebar = barcodes.barcodes[0].rawValue.toString();
             final product = await provider.getProductByCodebar(codebar);
 
@@ -39,7 +41,15 @@ class ScannerWidget extends StatelessWidget {
             } else {
               // manager.showSnackBar(const SnackBar(content: Text('')));
               final product = await getUserInput(codebar);
-              if (product != null) {
+              if (product == null) {
+                return;
+              }
+              final alreadyScanned = productsList.indexWhere(
+                    (element) => element.codebar == product.codebar,
+                  ) !=
+                  -1;
+
+              if (!alreadyScanned) {
                 provider.addProduct(
                   product,
                   onSuccess: (id) {
@@ -48,6 +58,12 @@ class ScannerWidget extends StatelessWidget {
                   onFail: (e) {
                     logger.e(e);
                   },
+                );
+              } else {
+                manager.showSnackBar(
+                  const SnackBar(
+                    content: Text('Produit deja dans la liste'),
+                  ),
                 );
               }
             }
