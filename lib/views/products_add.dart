@@ -46,7 +46,7 @@ class _ProductsAddState extends State<ProductsAdd> {
               final product = await getProductFromUser(context, codeBar);
               if (product != null) {
                 logger.d(product);
-                provider.addProduct(product, onSuccess: (id) {
+                widget.provider.addProduct(product, onSuccess: (id) {
                   // context.pop(true);
                   controller.start(cameraFacingOverride: CameraFacing.back);
                   added = true;
