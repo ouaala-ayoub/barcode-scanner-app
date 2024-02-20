@@ -37,17 +37,23 @@ class ProductsAdd extends StatelessWidget {
                 final foundProduct =
                     await provider.getProductByCodebar(codeBar);
                 if (foundProduct == null) {
-                  provider.addProduct(product, onSuccess: (id) {
-                    // context.pop(true);
-                    controller.start(cameraFacingOverride: CameraFacing.back);
-                    added = true;
-                  }, onFail: (e) {
-                    context.pop();
-                  });
+                  provider.addProduct(
+                    product,
+                    onSuccess: (id) {
+                      // context.pop(true);
+                      controller.start(cameraFacingOverride: CameraFacing.back);
+                      added = true;
+                    },
+                    onFail: (e) {
+                      context.pop();
+                    },
+                  );
                 } else {
-                  manager.showSnackBar(const SnackBar(
-                    content: Text('Produit deja dans la base de données'),
-                  ));
+                  manager.showSnackBar(
+                    const SnackBar(
+                      content: Text('Produit deja dans la base de données'),
+                    ),
+                  );
                 }
               } else {
                 //!async pop
