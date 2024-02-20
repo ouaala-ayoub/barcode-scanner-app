@@ -37,35 +37,39 @@ class ScannerWidget extends StatelessWidget {
             final product = await provider.getProductByCodebar(codebar);
 
             if (product != null) {
-              productsList.add(product);
-            } else {
-              // manager.showSnackBar(const SnackBar(content: Text('')));
-              final product = await getUserInput(codebar);
-              if (product == null) {
-                return;
-              }
+              //! the problem is the list is in the scan widget
               final alreadyScanned = productsList.indexWhere(
                     (element) => element.codebar == product.codebar,
                   ) !=
                   -1;
 
+              logger.d('already scanned $alreadyScanned');
+
               if (!alreadyScanned) {
-                provider.addProduct(
-                  product,
-                  onSuccess: (id) {
-                    productsList.add(product);
-                  },
-                  onFail: (e) {
-                    logger.e(e);
-                  },
-                );
+                productsList.add(product);
               } else {
                 manager.showSnackBar(
                   const SnackBar(
                     content: Text('Produit deja dans la liste'),
                   ),
                 );
+                return;
               }
+            } else {
+              // manager.showSnackBar(const SnackBar(content: Text('')));
+              final product = await getUserInput(codebar);
+              if (product == null) {
+                return;
+              }
+              provider.addProduct(
+                product,
+                onSuccess: (id) {
+                  productsList.add(product);
+                },
+                onFail: (e) {
+                  logger.e(e);
+                },
+              );
             }
           },
         ),
