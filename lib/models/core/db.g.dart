@@ -181,7 +181,7 @@ class _$ProductsDao extends ProductsDao {
   @override
   Future<int> updateProduct(Product product) {
     return _productUpdateAdapter.updateAndReturnChangedRows(
-        product, OnConflictStrategy.replace);
+        product, OnConflictStrategy.abort);
   }
 
   @override

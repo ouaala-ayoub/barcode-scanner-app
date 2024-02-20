@@ -9,11 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:testapp/main.dart';
+import 'package:testapp/models/core/db.dart';
+import 'package:testapp/models/helpers/db_helpers.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final dao = await $FloorProductsDataBase
+        .databaseBuilder('products_db_1.db')
+        .build();
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(
+      helper: ProductsHelper(productDb: dao),
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

@@ -5,6 +5,7 @@ import 'package:testapp/main.dart';
 import 'package:testapp/models/core/product.dart';
 import 'package:testapp/models/helpers/functions_helper.dart';
 import 'package:testapp/providers/products_list_provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ScannerWidget extends StatelessWidget {
   final ProductsListProvider provider;
@@ -31,6 +32,7 @@ class ScannerWidget extends StatelessWidget {
             detectionSpeed: DetectionSpeed.noDuplicates,
           ),
           onDetect: (barcodes) async {
+            AudioPlayer().play(AssetSource('audio/beep.mp3'));
             final codebar = barcodes.barcodes[0].rawValue.toString();
             final product = await provider.getProductByCodebar(codebar);
 
