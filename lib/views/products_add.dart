@@ -20,6 +20,8 @@ class ProductsAdd extends StatelessWidget {
       context.pop();
     }
 
+    final manager = ScaffoldMessenger.of(context);
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) => context.pop(added),
@@ -28,18 +30,25 @@ class ProductsAdd extends StatelessWidget {
           controller: controller,
           onDetect: (barcodes) async {
             final codeBar = barcodes.barcodes[0].rawValue;
-            logger.i(codeBar);
             if (codeBar != null) {
               final product = await getProductFromUser(context, codeBar);
               if (product != null) {
                 logger.d(product);
-                provider.addProduct(product, onSuccess: (id) {
-                  // context.pop(true);
-                  controller.start(cameraFacingOverride: CameraFacing.back);
-                  added = true;
-                }, onFail: (e) {
-                  context.pop();
-                });
+                final foundProduct =
+                    await provider.getProductByCodebar(codeBar);
+                if (foundProduct == null) {
+                  provider.addProduct(product, onSuccess: (id) {
+                    // context.pop(true);
+                    controller.start(cameraFacingOverride: CameraFacing.back);
+                    added = true;
+                  }, onFail: (e) {
+                    context.pop();
+                  });
+                } else {
+                  manager.showSnackBar(const SnackBar(
+                    content: Text('Produit deja dans la base de données'),
+                  ));
+                }
               } else {
                 //!async pop
                 pop();
