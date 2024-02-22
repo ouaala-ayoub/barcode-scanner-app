@@ -36,6 +36,9 @@ class _ProductsAddState extends State<ProductsAdd> {
       canPop: false,
       onPopInvoked: (didPop) => context.pop(added),
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Scanner pour ajouter des produits'),
+        ),
         body: MobileScanner(
           controller: controller,
           onDetect: (barcodes) async {

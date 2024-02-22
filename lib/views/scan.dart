@@ -22,20 +22,36 @@ class ScanPage extends StatelessWidget {
                 ? const Center(
                     child: Text('Pas de produits'),
                   )
-                : ListView.builder(
-                    itemCount: provider.scannedProducts.length,
-                    itemBuilder: (context, index) => CartProductWidget(
-                      addClicked: (scProduct) => provider.setQuantity(
-                          index, scProduct.cartQuantity + 1),
-                      minusClicked: (scProduct) => scProduct.cartQuantity > 0
-                          ? provider.setQuantity(
-                              index, scProduct.cartQuantity - 1)
-                          : null,
-                      cartProduct: provider.scannedProducts[index],
-                      onDeleteClicked: (product) => provider.removeProduct(
-                        product.id!,
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Clickez sur la quantité pour la changer'),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: provider.scannedProducts.length,
+                          itemBuilder: (context, index) => CartProductWidget(
+                            setQuantity: (quantity) => quantity.isNotEmpty
+                                ? provider.setQuantity(
+                                    index,
+                                    int.parse(quantity),
+                                  )
+                                : null,
+                            addClicked: (scProduct) => provider.setQuantity(
+                                index, scProduct.cartQuantity + 1),
+                            minusClicked: (scProduct) =>
+                                scProduct.cartQuantity > 1
+                                    ? provider.setQuantity(
+                                        index, scProduct.cartQuantity - 1)
+                                    : null,
+                            cartProduct: provider.scannedProducts[index],
+                            onDeleteClicked: (product) =>
+                                provider.removeProduct(
+                              product.id!,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
           ),
           Text(

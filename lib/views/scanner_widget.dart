@@ -15,7 +15,7 @@ class ScannerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final manager = ScaffoldMessenger.of(context);
+    // final manager = ScaffoldMessenger.of(context);
 
     getUserInput(String codebar) async {
       return await getProductFromUser(context, codebar);
@@ -27,9 +27,13 @@ class ScannerWidget extends StatelessWidget {
         context.pop(productsList);
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Scanner'),
+        ),
         body: MobileScanner(
           controller: MobileScannerController(
             detectionSpeed: DetectionSpeed.noDuplicates,
+            facing: CameraFacing.back,
           ),
           onDetect: (barcodes) async {
             AudioPlayer().play(AssetSource('audio/beep.mp3'));
@@ -37,24 +41,7 @@ class ScannerWidget extends StatelessWidget {
             final product = await provider.getProductByCodebar(codebar);
 
             if (product != null) {
-              //! the problem is the list is in the scan widget
-              final alreadyScanned = productsList.indexWhere(
-                    (element) => element.codebar == product.codebar,
-                  ) !=
-                  -1;
-
-              logger.d('already scanned $alreadyScanned');
-
-              if (!alreadyScanned) {
-                productsList.add(product);
-              } else {
-                manager.showSnackBar(
-                  const SnackBar(
-                    content: Text('Produit deja dans la liste'),
-                  ),
-                );
-                return;
-              }
+              productsList.add(product);
             } else {
               // manager.showSnackBar(const SnackBar(content: Text('')));
               final product = await getUserInput(codebar);

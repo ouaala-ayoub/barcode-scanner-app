@@ -11,11 +11,11 @@ class ProductsScanProvider extends ChangeNotifier {
       );
 
   addProducts(List<Product> products) {
-    scannedProducts.addAll(
-      products.map(
-        (product) => ScannedProduct(product: product),
-      ),
-    );
+    final productsToAdd = products
+        .where((element) => !scannedProducts
+            .any((scanned) => scanned.product.codebar == element.codebar))
+        .map((product) => ScannedProduct(product: product));
+    scannedProducts.addAll(productsToAdd);
     notifyListeners();
   }
 
