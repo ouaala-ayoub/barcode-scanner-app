@@ -39,10 +39,10 @@ dependencies:
   dartz:
   logger:
   floor:
-  sqflite: 
-  provider: 
+  sqflite:
+  provider:
   mobile_scanner: 3.5.5
-  audioplayers :
+  audioplayers:
 
 dev_dependencies:
   flutter_test:
@@ -54,16 +54,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  floor_generator :
-  build_runner :
-  flutter_launcher_icons :
+  floor_generator:
+  build_runner:
+  flutter_launcher_icons:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/app_icon.png"
+  image_path: "assets/images/app_icon.jpg"
 # The following section is specific to Flutter packages.
 flutter:
   # The following line ensures that the Material Icons font is
